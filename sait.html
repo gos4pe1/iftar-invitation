@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на Ифтар</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://i.imgur.com/T5XXAzk.png') no-repeat center center/cover;
+            color: #fff;
+            overflow-y: auto;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Анимация мерцания фона */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .container, .timer-container, .overview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 80px;
+            font-weight: bold;
+            color: #ffcc00;
+            animation: glow 2s infinite alternate, float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
+            100% { text-shadow: 0 0 20px #ffcc00, 0 0 30px #ffffff, 0 0 40px #ffcc00; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .text {
+            font-size: 40px;
+            color: #ffcc00;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #fff;
+            margin-top: 10px;
+            line-height: 1.5;
+            max-width: 800px;
+            opacity: 0.9;
+            animation: fadeInUp 2s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .map-container {
+            width: 90%;
+            max-width: 800px;
+            height: 400px;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ffcc00;
+            animation: scaleIn 1.5s ease-in-out;
+        }
+        
+        .timer {
+            font-size: 60px;
+            color: #ffcc00;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .back-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            font-weight: 600;
+            animation: fadeIn 3s ease-in-out;
+        }
+        
+        .back-button:hover {
+            background-color: #e6b800;
+            transform: scale(1.05);
+        }
+
+        /* Анимация появления */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Декоративные картинки */
+        .decorative-image {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decorative-image.top-left {
+            top: 10%;
+            left: 10%;
+            width: 150px;
+        }
+
+        .decorative-image.top-right {
+            top: 10%;
+            right: 10%;
+            width: 150px;
+        }
+
+        .decorative-image.bottom-left {
+            bottom: 10%;
+            left: 10%;
+            width: 150px;
+        }
+
+        .decorative-image.bottom-right {
+            bottom: 10%;
+            right: 10%;
+            width: 150px;
+        }
+
+        /* Секция обзора заведения */
+        .overview-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px 20px;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 50px;
+            }
+            .text {
+                font-size: 30px;
+            }
+            .subtitle {
+                font-size: 18px;
+            }
+            .timer {
+                font-size: 40px;
+            }
+            .map-container {
+                height: 300px;
+            }
+            .decorative-image {
+                width: 100px;
+            }
+            .gallery img {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Декоративные картинки -->
+    <img src="https://i.imgur.com/0uS2rRH.jpeg" alt="Decoration" class="decorative-image top-left">
+    <img src="https://i.imgur.com/0uS2rRH.jpeg" alt="Decoration" class="decorative-image top-right">
+    <img src="https://i.imgur.com/0uS2rRH.jpeg" alt="Decoration" class="decorative-image bottom-left">
+    <img src="https://i.imgur.com/0uS2rRH.jpeg" alt="Decoration" class="decorative-image bottom-right">
+
+    <div class="container visible" id="first-page">
+        <div class="title" id="main-title">Приглашаем вас на Ифтар</div>
+    </div>
+    
+    <div class="container visible" id="second-page">
+        <div class="text">Организаторы:<br> Каланов Еркебулан и Каленова Эльмира</div>
+        <div class="subtitle">Мы рады пригласить вас на этот благословенный вечер, который наполнит ваши сердца теплом и радостью!</div>
+        <div class="subtitle">Место проведения: <strong>Funduk</strong>, Микрорайон Гульдер-1, 3/1, Гульдер-1 м-н, Казыбек Би район, Караганда.</div>
+        <div class="subtitle">Вас ждет:</div>
+        <ul style="text-align: left; max-width: 800px; margin: 20px auto; font-size: 20px;">
+            <li>🌙 Традиционные блюда для Ифтара.</li>
+            <li>🕌 Уютная атмосфера в стиле восточного гостеприимства.</li>
+            <li>🍴 Широкий выбор блюд, приготовленных с любовью.</li>
+            <li>🎉 Приятная музыка и теплая компания.</li>
+        </ul>
+    </div>
+    
+    <div class="container visible" id="map-page">
+        <div class="title">Местоположение</div>
+        <iframe class="map-container" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2924.167661459743!2d73.155699!3d49.791123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x424339aa6955567f%3A0x1b9e6ff768be4d7b!2sFunduk!5e0!3m2!1sen!2s!4v1710102934965" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    
+    <div class="overview-container visible" id="overview-page">
+        <div class="title">О заведении "Фундук"</div>
+        <div class="subtitle">Мы рады представить вам наше новое заведение, оформленное в стиле мусульманского гостеприимства. Здесь вы найдете уютную атмосферу, вкусные блюда и теплый прием.</div>
+        <div class="gallery">
+            <img src="https://i.imgur.com/NH88aar.jpeg" alt="Фундук">
+            <img src="https://i.imgur.com/cIH0WXY.jpeg" alt="Фундук">
+            <img src="https://i.imgur.com/iGPbJqv.jpeg" alt="Фундук">
+            <img src="https://i.imgur.com/NY7XG6P.jpeg" alt="Фундук">
+            <img src="https://i.imgur.com/cLc97dC.jpeg" alt="Фундук">
+            <img src="https://i.imgur.com/iKxXxjX.jpeg" alt="Фундук">
+        </div>
+    </div>
+    
+    <div class="timer-container visible" id="timer-page">
+        <div class="title">Мероприятие начнется 9 марта</div>
+        <div class="timer" id="countdown">00:00:00</div>
+        <button class="back-button" onclick="smoothScrollToTop()">Вернуться на первую страницу</button>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.container, .timer-container, .overview-container').forEach(container => {
+                container.classList.add('visible');
+            });
+        });
+
+        // Плавный скролл к началу страницы с анимацией заголовка
+        function smoothScrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            // Анимация заголовка
+            const title = document.getElementById('main-title');
+            title.style.opacity = 0;
+            title.style.transform = 'translateY(50px)';
+            setTimeout(() => {
+                title.style.opacity = 1;
+                title.style.transform = 'translateY(0)';
+            }, 500);
+        }
+
+        function startTimer(targetDate) {
+            let target = new Date(targetDate).getTime();
+            let interval = setInterval(function () {
+                let now = new Date().getTime();
+                let distance = target - now;
+
+                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').textContent = 
+                    (days > 0 ? days + "д " : "") +
+                    (hours < 10 ? "0" : "") + hours + ":" +
+                    (minutes < 10 ? "0" : "") + minutes + ":" +
+                    (seconds < 10 ? "0" : "") + seconds;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown').textContent = "Мероприятие началось!";
+                }
+            }, 1000);
+        }
+
+        startTimer("March 9, 2025 18:00:00");
+    </script>
+</body>
+</html>
